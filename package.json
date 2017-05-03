@@ -30,7 +30,8 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "serialize-javascript": "^1.0.0",
-    "serve-favicon": "^2.1.6"
+    "serve-favicon": "^2.1.6",
+    "socketio": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^5.0.0",

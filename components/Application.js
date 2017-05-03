@@ -14,7 +14,6 @@ import Title from 'grommet/components/Title';
 class Application extends React.Component {
   render() {
     var Handler = this.props.currentRoute.handler;
-
     return (
       <Box>
         <Header justify='center' colorIndex='neutral-4'>
@@ -22,7 +21,7 @@ class Application extends React.Component {
             Screenshare Chat
           </Title>
         </Header>
-        <Handler />
+        <Handler context={this.props.context}/>
       </Box>
     );
   }
