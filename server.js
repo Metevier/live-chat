@@ -7,6 +7,7 @@
 
 import express from 'express';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import path from 'path';
 import serialize from 'serialize-javascript';
@@ -17,6 +18,10 @@ import ReactDOM from 'react-dom/server';
 import app from './app';
 import HtmlComponent from './components/Html';
 import { createElementWithContext } from 'fluxible-addons-react';
+
+//Services
+import RoomService from './services/RoomService';
+
 const env = process.env.NODE_ENV;
 
 const debug = debugLib('screenshare-chat');
@@ -25,9 +30,15 @@ const server = express();
 server.use('/public', express['static'](path.join(__dirname, '/build')));
 server.use(compression());
 server.use(bodyParser.json());
+server.use(cookieParser());
+
+const fetchrPlugin = app.getPlugin('FetchrPlugin');
+fetchrPlugin.registerService(RoomService);
+
+server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 
 server.use((req, res, next) => {
-  const context = app.createContext();
+  const context = app.createContext({ req, res });
 
   debug('Executing navigate action');
   context.getActionContext().executeAction(navigateAction, {

@@ -10,6 +10,8 @@ import Layer from 'grommet/components/Layer';
 import Section from 'grommet/components/Section';
 import TextInput from 'grommet/components/TextInput';
 
+import { startNewRoom, joinRoom } from '../actions/HomeActions';
+
 class NewRoomDialog extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +23,7 @@ class NewRoomDialog extends Component {
 
   startNewRoom(event) {
     event.preventDefault();
+    this.props.context.executeAction(startNewRoom, this.state);
   }
 
   updateScreenName(event) {
@@ -57,12 +60,13 @@ class JoinRoomDialog extends Component {
 
     this.state = {
       screenName: '',
-      joinId: ''
+      roomId: ''
     };
   }
 
   joinRoom(event) {
     event.preventDefault();
+    this.props.context.executeAction(joinRoom, this.state);
   }
 
   updateScreenName(event) {
@@ -71,9 +75,9 @@ class JoinRoomDialog extends Component {
     });
   }
 
-  updateJoinId(event) {
+  updateRoomId(event) {
     this.setState({
-      joinId: event.target.value
+      roomId: event.target.value
     });
   }
 
@@ -94,7 +98,7 @@ class JoinRoomDialog extends Component {
               <TextInput id='joinId'
                 name='join-id'
                 value={this.state.joinId}
-                onDOMChange={this.updateJoinId.bind(this)} />
+                onDOMChange={this.updateRoomId.bind(this)} />
             </FormField>
             <Box pad={{vertical: 'small'}}>
               <Button label='Join Chatroom' type='submit' onClick={this.joinRoom.bind(this)} fill={true} accent={true} />
@@ -117,6 +121,7 @@ export default class Home extends Component {
     };
   }
 
+  //Only one dialog should be open at a time
   showNewRoomDialog() {
     this.setState({
       shouldShowNewRoomDialog: true,
@@ -157,8 +162,8 @@ export default class Home extends Component {
             </Button>
           </Box>
         </Columns>
-        {this.state.shouldShowNewRoomDialog ? <NewRoomDialog closeDialog={this.closeDialog.bind(this)} /> : null}
-        {this.state.shouldShowJoinRoomDialog ? <JoinRoomDialog closeDialog={this.closeDialog.bind(this)} /> : null}
+        {this.state.shouldShowNewRoomDialog ? <NewRoomDialog context={this.props.context} closeDialog={this.closeDialog.bind(this)} /> : null}
+        {this.state.shouldShowJoinRoomDialog ? <JoinRoomDialog context={this.props.context} closeDialog={this.closeDialog.bind(this)} /> : null}
       </Box>
     );
   }
