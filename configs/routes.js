@@ -14,9 +14,6 @@ export default {
     method: 'get',
     page: 'room',
     title: 'Chat Room',
-    handler: Room,
-    action: (context, payload, done) => {
-      done();
-    }
+    handler: Room
   }
 };
