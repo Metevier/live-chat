@@ -6,7 +6,7 @@ import Box from 'grommet/components/Box';
 import Form from 'grommet/components/Form';
 import TextInput from 'grommet/components/TextInput';
 
-import { addChat, initSocket } from '../actions/RoomActions';
+import { addChat, destroySocket, initSocket } from '../actions/RoomActions';
 
 class Room extends Component {
 
@@ -18,10 +18,12 @@ class Room extends Component {
     };
   }
 
-  componentWillMount() {
-    console.log('d');
-    this.props.context.executeAction(initSocket);
-    console.log('here');
+  componentDidMount() {
+    this.props.context.executeAction(initSocket, { roomId: this.props.roomId  });
+  }
+
+  componentWillUnmount() {
+    this.props.context.executeAction(destroySocket);
   }
 
   addChat(event) {

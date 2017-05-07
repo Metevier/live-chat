@@ -8,6 +8,10 @@ export default class Room {
   addUser(screenName, userId) {
     this.users[userId] = screenName;
   }
+
+  isValidUser(userId) { 
+    return !!this.users[userId];
+  }
   
   getUsers() {
     return this.users;

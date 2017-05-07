@@ -1,6 +1,8 @@
 import Home from '../components/Home';
 import Room from '../components/Room';
 
+import { isValidRoomAndUser } from '../actions/HomeActions';
+
 export default {
   home: {
     path: '/',
@@ -14,6 +16,7 @@ export default {
     method: 'get',
     page: 'room',
     title: 'Chat Room',
-    handler: Room
+    handler: Room,
+    action: isValidRoomAndUser
   }
 };

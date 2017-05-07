@@ -20,7 +20,7 @@ import HtmlComponent from './components/Html';
 import { createElementWithContext } from 'fluxible-addons-react';
 import http from 'http';
 import io from 'socket.io';
-import RoomManager  from './api/RoomManager';
+import RoomManager from './api/RoomManager';
 
 //Services
 import RoomService from './services/RoomService';
@@ -85,10 +85,22 @@ httpServer.listen(port);
 console.log('Application listening on port ' + port);
 
 ioServer.on('connection', (socket) => {
+
   socket.on('add-chat', ({ message, userId, roomId }) => {
     let room = RoomManager.getRoom(roomId);
     room.addChat(userId, message);
-    ioServer.emit('update-chats', { chats: room.getChats() });
+    ioServer.to(roomId).emit('update-chats', { chats: room.getChats() });
+  });
+
+  socket.on('user-joined', ({ userId, roomId }) => {
+    let isValidRoom = RoomManager.isValidRoom(roomId);
+    if (isValidRoom) {
+      socket.join(roomId);
+      let room = RoomManager.getRoom(roomId);
+      let users = room.getUsers();
+      ioServer.to(roomId).emit('update-users', { users });
+      ioServer.to(roomId).emit('update-chats', { chats: room.getChats() });
+    } 
   });
 });
 
