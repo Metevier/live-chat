@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { connectToStores } from 'fluxible-addons-react';
+import RoomStore from '../stores/RoomStore';
 
 import Box from 'grommet/components/Box';
 import Form from 'grommet/components/Form';
 import TextInput from 'grommet/components/TextInput';
 
-import { addChat } from '../actions/ChatActions';
+import { addChat, initSocket } from '../actions/RoomActions';
 
-export default class Room extends Component {
+class Room extends Component {
 
   constructor(props) {
     super(props);
@@ -16,9 +18,15 @@ export default class Room extends Component {
     };
   }
 
+  componentWillMount() {
+    console.log('d');
+    this.props.context.executeAction(initSocket);
+    console.log('here');
+  }
+
   addChat(event) {
     event.preventDefault();
-    this.props.context.executeAction(addChat, { message: this.state.message });
+    this.props.context.executeAction(addChat, { message: this.state.message, roomId: this.props.roomId });
     this.setState({
       message: ''
     });
@@ -33,6 +41,10 @@ export default class Room extends Component {
   render() {
     return (
       <Box pad='medium'>
+        <div>{this.props.roomId}</div>
+        {this.props.chats.map(chat => {
+          return <div>{chat.message}</div>
+        })}
         <Form pad='medium' onSubmit={this.addChat.bind(this)}>
             <TextInput id='message'
                 name='message'
@@ -43,3 +55,16 @@ export default class Room extends Component {
     );
   }
 }
+
+export default connectToStores(
+  Room,
+  [RoomStore],
+  (context, props) => {
+    let { roomId, chats, users } = context.getStore(RoomStore).getState();
+    return {
+      roomId,
+      chats,
+      users
+    };
+  }
+);

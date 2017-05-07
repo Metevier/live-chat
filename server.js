@@ -18,6 +18,9 @@ import ReactDOM from 'react-dom/server';
 import app from './app';
 import HtmlComponent from './components/Html';
 import { createElementWithContext } from 'fluxible-addons-react';
+import http from 'http';
+import io from 'socket.io';
+import RoomManager  from './api/RoomManager';
 
 //Services
 import RoomService from './services/RoomService';
@@ -74,8 +77,20 @@ server.use((req, res, next) => {
   });
 });
 
+const httpServer = http.createServer(server)
+const ioServer = io.listen(httpServer);
+
 const port = process.env.PORT || 3000;
-server.listen(port);
+httpServer.listen(port);
 console.log('Application listening on port ' + port);
+
+ioServer.on('connection', (socket) => {
+  socket.on('add-chat', ({ message, userId, roomId }) => {
+    let room = RoomManager.getRoom(roomId);
+    room.addChat(userId, message);
+    ioServer.emit('update-chats', { chats: room.getChats() });
+  });
+});
+
 
 export default server;

@@ -5,6 +5,7 @@ export function joinRoom(context, { roomId, screenName }, done) {
   context.service.update('room', { roomId, screenName, currentUserId }, {}, (err, { isValidRoom, userId }) => {
     if (isValidRoom) {
       context.setCookie('userId', userId);
+      context.dispatch('UPDATE_ROOM_ID', { roomId });
       context.executeAction(navigateAction, { method: 'get', routeName: 'room', params: { roomId } }, () => {
         done(err);
       });
@@ -18,6 +19,7 @@ export function startNewRoom(context, { screenName }, done) {
   let currentUserId = context.getCookie('userId');
   context.service.create('room', { screenName, currentUserId }, {}, (err, { roomId, userId }) => {
     context.setCookie('userId', userId);
+    context.dispatch('UPDATE_ROOM_ID', { roomId });
     context.executeAction(navigateAction, { method: 'get', routeName: 'room', params: { roomId } }, () => {
       done(err);
     });
