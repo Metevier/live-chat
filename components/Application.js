@@ -18,7 +18,7 @@ class Application extends React.Component {
       <Box>
         <Header justify='center' colorIndex='neutral-4'>
           <Title>
-            Screenshare Chat
+            Live Chat
           </Title>
         </Header>
         <Handler context={this.props.context}/>

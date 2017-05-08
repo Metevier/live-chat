@@ -3,9 +3,7 @@ var socket = null;
 
 export function initSocket(context, { roomId }, done) {
   let userId = context.getCookie('userId');
-  console.log(window.location.origin);
-  socket = socketClient(window.location.origin, {forceNew: true});
-  console.log(socket);
+  socket = socketClient({forceNew: true});
   socket.on('update-chats', ({ chats }) => {
     context.dispatch('UPDATE_CHATS', { chats });
   });

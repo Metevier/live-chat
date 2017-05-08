@@ -44,8 +44,13 @@ class Room extends Component {
     return (
       <Box pad='medium'>
         <div>{this.props.roomId}</div>
-        {this.props.chats.map(chat => {
-          return <div>{chat.message}</div>
+        {this.props.chats.map((chat, index) => {
+          return (
+            <div key={index}>
+              <div>{chat.screenName}</div>
+              <div>{chat.message}</div>
+            </div>
+          )
         })}
         <Form pad='medium' onSubmit={this.addChat.bind(this)}>
             <TextInput id='message'

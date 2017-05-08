@@ -5,7 +5,7 @@ import debug from 'debug';
 import { createElementWithContext } from 'fluxible-addons-react';
 import app from './app';
 
-const debugClient = debug('screenshare-chat');
+const debugClient = debug('live-chat');
 const dehydratedState = window.App; // Sent from the server
 
 window.React = ReactDOM; // For chrome dev tool support

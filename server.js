@@ -27,7 +27,7 @@ import RoomService from './services/RoomService';
 
 const env = process.env.NODE_ENV;
 
-const debug = debugLib('screenshare-chat');
+const debug = debugLib('live-chat');
 
 const server = express();
 server.use('/public', express['static'](path.join(__dirname, '/build')));

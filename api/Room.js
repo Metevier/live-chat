@@ -21,8 +21,7 @@ export default class Room {
     let chat = {
       userId,
       message,
-      screenName: this.getUsers[userId],
-      date: new Date()
+      screenName: this.getUsers()[userId]
     };
     this.chats.push(chat);
   }
