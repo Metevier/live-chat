@@ -3,8 +3,12 @@ import { connectToStores } from 'fluxible-addons-react';
 import RoomStore from '../stores/RoomStore';
 
 import Box from 'grommet/components/Box';
+import Button from 'grommet/components/Button';
 import Form from 'grommet/components/Form';
+import Label from 'grommet/components/Label';
+import Split from 'grommet/components/Split';
 import TextInput from 'grommet/components/TextInput';
+import Title from 'grommet/components/Title';
 
 import { addChat, destroySocket, initSocket } from '../actions/RoomActions';
 
@@ -19,7 +23,8 @@ class Room extends Component {
   }
 
   componentDidMount() {
-    this.props.context.executeAction(initSocket, { roomId: this.props.roomId  });
+    require('./Room.scss');
+    this.props.context.executeAction(initSocket, { roomId: this.props.roomId });
   }
 
   componentWillUnmount() {
@@ -42,23 +47,50 @@ class Room extends Component {
 
   render() {
     return (
-      <Box pad='medium'>
-        <div>{this.props.roomId}</div>
-        {this.props.chats.map((chat, index) => {
-          return (
-            <div key={index}>
-              <div>{chat.screenName}</div>
-              <div>{chat.message}</div>
-            </div>
-          )
-        })}
-        <Form pad='medium' onSubmit={this.addChat.bind(this)}>
-            <TextInput id='message'
+      <Split separator={false} flex='right'>
+        <Box colorIndex='neutral-2'
+          justify='start'
+          align='start'
+          pad={{ horizontal: 'medium' }}
+          className='full-height' >
+          <Box pad='medium' >
+            <Title>Online Users</Title>
+            {Object.keys(this.props.users).map((key, index) => {
+              return <Box pad='small' justify='start' key={index}>{this.props.users[key]}</Box>
+            })}
+          </Box>
+        </Box>
+        <Box justify='start'
+          size='full'
+          className='full-height'>
+          <Box pad='medium'>
+            <Title>{'Room ID: ' + this.props.roomId}</Title>
+          </Box>
+          <Box justify='start' size='full' pad='medium' className='chat-window'>
+            <Box >
+              {this.props.chats.map((chat, index) => {
+                return (
+                  <Box key={index} className='chat-entry'>
+                    <Label margin='none'>{chat.screenName}</Label>
+                    <Box>{chat.message}</Box>
+                  </Box>
+                )
+              })}
+            </Box>
+          </Box>
+          <Box pad={{ vertical: 'medium' }}>
+            <Form pad={{ horizontal: 'medium' }} onSubmit={this.addChat.bind(this)} plain={true}>
+              <TextInput id='message'
                 name='message'
+                fill={true}
+                placeHolder='Enter your chat'
                 value={this.state.message}
-                onDOMChange={this.updateMessage.bind(this)} />
-          </Form>
-      </Box>
+                onDOMChange={this.updateMessage.bind(this)} 
+                className='chat-input' />
+            </Form>
+          </Box>
+        </Box>
+      </Split>
     );
   }
 }
