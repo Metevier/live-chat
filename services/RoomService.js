@@ -1,4 +1,4 @@
-import RoomManager from '../api/RoomManager';
+import RoomManager from '../data/RoomManager';
 
 export default {
   name: 'room',

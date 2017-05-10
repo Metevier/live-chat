@@ -16,7 +16,7 @@ class Room extends Component {
 
   constructor(props) {
     super(props);
-
+    
     this.state = {
       message: ''
     };
@@ -31,8 +31,20 @@ class Room extends Component {
     this.props.context.executeAction(destroySocket);
   }
 
+  componentDidUpdate() {
+    let element = this.chatWindow.boxContainerRef; //Have to get the element from the grommet wrapper
+    let atBottom = (element.scrollHeight - element.clientHeight) <= (element.scrollTop + 1);
+    console.log(element, atBottom)
+    if(!atBottom) {
+
+    }
+      element.scrollTop = element.scrollHeight - element.clientHeight;
+  }
+
   addChat(event) {
     event.preventDefault();
+    if (this.state.message === '') return;
+    
     this.props.context.executeAction(addChat, { message: this.state.message, roomId: this.props.roomId });
     this.setState({
       message: ''
@@ -66,8 +78,8 @@ class Room extends Component {
           <Box pad='medium'>
             <Title>{'Room ID: ' + this.props.roomId}</Title>
           </Box>
-          <Box justify='start' size='full' pad='medium' className='chat-window'>
-            <Box >
+          <Box justify='start' size='full' pad='medium' className='chat-window' ref={chatWindow => this.chatWindow = chatWindow}>
+            <Box>
               {this.props.chats.map((chat, index) => {
                 return (
                   <Box key={index} className='chat-entry'>

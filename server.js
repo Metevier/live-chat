@@ -20,7 +20,7 @@ import HtmlComponent from './components/Html';
 import { createElementWithContext } from 'fluxible-addons-react';
 import http from 'http';
 import io from 'socket.io';
-import RoomManager from './api/RoomManager';
+import RoomManager from './data/RoomManager';
 
 //Services
 import RoomService from './services/RoomService';
